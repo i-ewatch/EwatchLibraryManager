@@ -9,6 +9,42 @@ namespace ShinningSunshineLibrary
     public class SolarAngleClass
     {
         /// <summary>
+        /// 緯度
+        /// </summary>
+        private static double latitude { get; set; }
+
+        /// <summary>
+        /// 設定緯度
+        /// </summary>
+        /// <param name="latitude">設定緯度</param>
+        public SolarAngleClass(double _latitude)
+        {
+            latitude = _latitude;
+        }
+        /// <summary>
+        /// 取得當前時間的太陽仰角
+        /// </summary>
+        /// <returns></returns>
+        public static double GetAngleOfSun()
+        {
+            double hourAngle = CalculateHourAngle(DateTime.Now);        //計算時角
+            double declination = CalculateDeclination(DateTime.Now);    //計算赤緯
+            double zenithAngle = CalculateZenithAngleOfSun(latitude, declination, hourAngle);       //計算天頂角
+            return CalculateElevationAngleOfSun(zenithAngle);           //回傳高度角
+        }
+        /// <summary>
+        /// 取得指定時間的太陽仰角
+        /// </summary>
+        /// <returns></returns>
+        public static double GetAngleOfSun(DateTime dateTime)
+        {
+            double hourAngle = CalculateHourAngle(dateTime);            //計算時角
+            double declination = CalculateDeclination(dateTime);        //計算赤緯
+            double zenithAngle = CalculateZenithAngleOfSun(latitude, declination, hourAngle);       //計算天頂角
+            return CalculateElevationAngleOfSun(zenithAngle);           //回傳高度角
+        }
+
+        /// <summary>
         /// 計算太陽方位角
         /// </summary>
         /// <param name="declination">太陽赤緯</param>
@@ -48,7 +84,6 @@ namespace ShinningSunshineLibrary
             double radiansZenithAngleOfSun = Math.Acos(cosZenithAngleOfSun);
             // 弧度轉換角度
             double zenithAngleOfSun = radiansZenithAngleOfSun * 180d / Math.PI;
-
             return zenithAngleOfSun;
         }
 
